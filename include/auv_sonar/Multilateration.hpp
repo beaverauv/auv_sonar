@@ -48,17 +48,25 @@ public:
   double int3;
   double int4;
 
+  double distDifference12 = 0;
+  double distDifference23 = 0;
+  double distDifference34 = 0;
+  double distDifference41 = 0;
+
+  int getSign();
+
 private:
   float mountingDistance = 1; // The distance between each hydrophone in mm
 
 
   double a = 0.115784275175;
-
+  //double a = sq(distDifference12/2);
   double b = 0.935821596706;
-
+  //double b = sq(distDifference23/2)
   double c = 0.0886131503014;
-
+  //double c = sq(distDifference34/2)
   double d = 0.855231827134;
+  //double d = sq(distDifference14/2)
 
   Equation f1 = [&](double x, int sign) {
     return xDist + (sign * sqrt((sq(xDist) - a) - ((sq(x) / a) - 1)));
