@@ -95,24 +95,24 @@ bool checkForPinger(int arrayPosition, double intersection){
   allIntersections.at(arrayPosition).at(0) = intersection;
 
   if(arrayPosition == 0){
-  allIntersections.at(arrayPosition).at(1) =
-      functionCombined(f1, f2, intersection, 1);
+    allIntersections.at(arrayPosition).at(1) =
+    functionCombined(f1, f2, intersection, 1);
   }
   else if(arrayPosition == 1){
-  allIntersections.at(arrayPosition).at(1) =
-      functionCombined(f1, f3, intersection, 1);
+    allIntersections.at(arrayPosition).at(1) =
+    functionCombined(f1, f3, intersection, 1);
   }
   else if(arrayPosition == 2){
-  allIntersections.at(arrayPosition).at(1) =
-      functionCombined(f1, f4, intersection, 1);
+    allIntersections.at(arrayPosition).at(1) =
+    functionCombined(f1, f4, intersection, 1);
   }
   else if(arrayPosition == 3){
-  allIntersections.at(arrayPosition).at(1) =
-      functionCombined(f2, f4, intersection, 1);
+    allIntersections.at(arrayPosition).at(1) =
+    functionCombined(f2, f4, intersection, 1);
   }
-  else if(arrayPosition == 5){
-  allIntersections.at(arrayPosition).at(1) =
-      functionCombined(f3, f4, intersection, 1);
+  else if(arrayPosition == 4){
+    allIntersections.at(arrayPosition).at(1) =
+    functionCombined(f3, f4, intersection, 1);
   }
 
   printf("%.18f, %.18f\n", intersection,
