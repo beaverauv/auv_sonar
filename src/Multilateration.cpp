@@ -58,26 +58,34 @@ void Multilateration::findAllIntersections() {
 void Multilateration::findPinger(){
 
   int0 = findFunctionIntersection(f1, f2, fd1, fd2, 1);
-  int1 = findFunctionIntersection(f1, f3, fd1, fd3, 1);
-  xint2 = findFunctionIntersection(f1, f4, fd1, fd3, 1);
-  xint3 = findFunctionIntersection(f2, f4, fd2, fd4, 1);
-  xint4 = findFunctionIntersection(f3, f4, fd3, fd4, 1);
-
   if(isPinger(int0)){
+    printf("Pinger Located\n");
     return;
   }
+  int1 = findFunctionIntersection(f1, f3, fd1, fd3, 1);
   if(isPinger(int1)){
+    printf("Pinger Located\n");
     return;
   }
+  xint2 = findFunctionIntersection(f1, f4, fd1, fd3, 1);
   if(isPinger(int2)){
+    printf("Pinger Located\n");
     return;
   }
+  xint3 = findFunctionIntersection(f2, f4, fd2, fd4, 1);
   if(isPinger(int3)){
+    printf("Pinger Located\n");
     return;
   }
+  xint4 = findFunctionIntersection(f3, f4, fd3, fd4, 1);
   if(isPinger(int4)){
+    printf("Pinger Located\n");
     return;
   }
+  else{
+    printf("PINGER NOT LOCATED\n");
+  }
+
 }
 
 bool Multilateration::isPinger(double intersectionXCoordinate){
