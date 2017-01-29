@@ -8,7 +8,7 @@
 
 typedef std::function<double(double, int)> Equation;
 typedef std::function<double(Equation, Equation, double, int)> CombinedEquation;
-typedef std::array<std::array<double, 2>, 12> Intersections;
+typedef std::array<std::array<double, 2>, 10> Intersections;
 
 class Multilateration {
 public:

@@ -81,9 +81,9 @@ void Multilateration::findPinger(){
 }
 
 bool Multilateration::isPinger(double intersectionXCoordinate){
-  if((functionCombined(f1, f2, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh) &&
-    (functionCombined(f1, f3, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh) &&
-    (functionCombined(f1, f4, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh) &&
+  if((functionCombined(f1, f2, intersectionXCoordinate, 1) - (functionCombined(f1, f3, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh) &&
+    (functionCombined(f1, f3, intersectionXCoordinate, 1) - (f1, f4, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh) &&
+    (functionCombined(f1, f4, intersectionXCoordinate, 1) - (f3, f4, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh)
     ){
     return true;
   }
