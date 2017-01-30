@@ -1,4 +1,4 @@
-#include <auv_mission_control/Multilateration.hpp>
+#include <auv_sonar/Multilateration.hpp>
 
 Multilateration::Multilateration() {}
 
@@ -55,56 +55,63 @@ void Multilateration::findAllIntersections() {
          allIntersections.at(4).at(1));
 }
 
-void Multilateration::findPinger(){
+void Multilateration::findPinger() {
 
-  int0 = findFunctionIntersection(f1, f2, fd1, fd2, 1);
-  if(isPinger(int0)){
+  xint0 = findFunctionIntersection(f1, f2, fd1, fd2, 1);
+  if (isPinger(xint0)) {
+    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
     printf("Pinger Located\n");
     return;
   }
-  int1 = findFunctionIntersection(f1, f3, fd1, fd3, 1);
-  if(isPinger(int1)){
+  xint1 = findFunctionIntersection(f1, f3, fd1, fd3, 1);
+  if (isPinger(xint1)) {
+    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
     printf("Pinger Located\n");
     return;
   }
   xint2 = findFunctionIntersection(f1, f4, fd1, fd3, 1);
-  if(isPinger(int2)){
+  if (isPinger(xint2)) {
+    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
     printf("Pinger Located\n");
     return;
   }
   xint3 = findFunctionIntersection(f2, f4, fd2, fd4, 1);
-  if(isPinger(int3)){
+  if (isPinger(xint3)) {
+    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
     printf("Pinger Located\n");
     return;
   }
   xint4 = findFunctionIntersection(f3, f4, fd3, fd4, 1);
-  if(isPinger(int4)){
+  if (isPinger(xint4)) {
     printf("Pinger Located\n");
+    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
     return;
-  }
-  else{
+  } else {
     printf("PINGER NOT LOCATED\n");
   }
-
 }
 
-bool Multilateration::isPinger(double intersectionXCoordinate){
-  if((functionCombined(f1, f2, intersectionXCoordinate, 1) - (functionCombined(f1, f3, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh) &&
-    (functionCombined(f1, f3, intersectionXCoordinate, 1) - (f1, f4, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh) &&
-    (functionCombined(f1, f4, intersectionXCoordinate, 1) - (f3, f4, intersectionXCoordinate, 1) <= NewtonRaphsonXThresh)
-    ){
-      pingerLocation.at(xCoord) = intersection;
-      pingerLocation.at(yCoord) = f1(intersection, 1);
-      return true;
+bool Multilateration::isPinger(double intersectionXCoordinate) {
+  int onetwo = functionCombined(f1, f2, intersectionXCoordinate, 1);
+  int onethree = functionCombined(f1, f3, intersectionXCoordinate, 1);
+  int onefour = functionCombined(f1, f4, intersectionXCoordinate, 1);
+  int threefour = functionCombined(f3, f4, intersectionXCoordinate, 1);
+  bool onetwoonethree = ((onetwo - onethree) <= NewtonRaphsonXThresh);
+  bool onethreeonefour = ((onethree - onefour) <= NewtonRaphsonXThresh);
+  bool onefourthreefour = ((onefour - threefour) <= NewtonRaphsonXThresh);
+  if (onetwoonethree && onethreeonefour && onefourthreefour) {
+    pingerLocation.at(xCoord) = intersectionXCoordinate;
+    pingerLocation.at(yCoord) = f1(intersectionXCoordinate, 1);
+    return true;
+  } else {
+    return false;
   }
-  else { return false }
 }
 
-Multilateration::getSign(){
-  if timeLag23 > 0{
+int Multilateration::getSign() {
+  if (timeLag23 > 0) {
     return 1;
-  }
-  else{
+  } else {
     return -1;
   }
 }
