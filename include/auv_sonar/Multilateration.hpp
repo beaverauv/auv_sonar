@@ -37,7 +37,7 @@ public:
   double xDist = 1;
   double NewtonRaphsonXThresh = .0000000000001;
   int iteratorNewton;
-  int maxIterations = 10000;
+  int maxIterations = 100;
   int arrayCounter = 0;
 
   int xCoord = 0; // for array purposes

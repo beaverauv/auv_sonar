@@ -1,4 +1,5 @@
 #include <auv_sonar/Multilateration.hpp>
+#include <limits>
 
 Multilateration::Multilateration() {}
 
@@ -14,10 +15,12 @@ double Multilateration::findFunctionIntersection(Equation f1, Equation f2,
     xChange = functionCombined(f1, f2, xCurrent, sign) /
               functionCombined(fd1, fd2, xCurrent, sign);
     xCurrent -= xChange;
+    // printf("xChange: %f\n", xChange);
+    // printf("xCurrent: %f\n", xCurrent);
     numberOfIterations++;
     if (numberOfIterations > maxIterations) {
-      printf("PANIC\n");
-      break;
+      // printf("PANIC\n");
+      return std::numeric_limits<double>::quiet_NaN();
     }
   }
   return xCurrent;
@@ -58,36 +61,53 @@ void Multilateration::findAllIntersections() {
 void Multilateration::findPinger() {
 
   xint0 = findFunctionIntersection(f1, f2, fd1, fd2, 1);
-  if (isPinger(xint0)) {
-    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
-    printf("Pinger Located\n");
-    return;
-  }
-  xint1 = findFunctionIntersection(f1, f3, fd1, fd3, 1);
-  if (isPinger(xint1)) {
-    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
-    printf("Pinger Located\n");
-    return;
-  }
-  xint2 = findFunctionIntersection(f1, f4, fd1, fd3, 1);
-  if (isPinger(xint2)) {
-    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
-    printf("Pinger Located\n");
-    return;
-  }
-  xint3 = findFunctionIntersection(f2, f4, fd2, fd4, 1);
-  if (isPinger(xint3)) {
-    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
-    printf("Pinger Located\n");
-    return;
-  }
-  xint4 = findFunctionIntersection(f3, f4, fd3, fd4, 1);
-  if (isPinger(xint4)) {
-    printf("Pinger Located\n");
-    printf("%.18f, %.18f\n", pingerLocation.at(0), pingerLocation.at(1));
+  printf("Found function intersection for 1 and 2 at %f\n", xint0);
+  if (!(xint0 != xint0) && isPinger(xint0)) {
+    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+           pingerLocation.at(1));
     return;
   } else {
-    printf("PINGER NOT LOCATED\n");
+    printf("Pinger not found\n");
+  }
+  xint1 = findFunctionIntersection(f1, f3, fd1, fd3, 1);
+  printf("Found function intersection for 1 and 3 at %f\n", xint1);
+  if (!(xint1 != xint1) && isPinger(xint1)) {
+    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+           pingerLocation.at(1));
+    printf("Pinger Located13\n");
+    return;
+  } else {
+    printf("Pinger not found\n");
+  }
+  xint2 = findFunctionIntersection(f1, f4, fd1, fd4, 1);
+  printf("Found function intersection for 1 and 4 at %f\n", xint2);
+  if (!(xint2 != xint2) && isPinger(xint2)) {
+    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+           pingerLocation.at(1));
+    printf("Pinger Located14\n");
+    return;
+  } else {
+    printf("Pinger not found\n");
+  }
+  xint3 = findFunctionIntersection(f2, f4, fd2, fd4, 1);
+  printf("Found function intersection for 2 and 4 at %f\n", xint3);
+  if (!(xint3 != xint3) && isPinger(xint3)) {
+    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+           pingerLocation.at(1));
+    printf("Pinger Located24\n");
+    return;
+  } else {
+    printf("Pinger not found\n");
+  }
+  xint4 = findFunctionIntersection(f3, f4, fd3, fd4, 1);
+  printf("Found function intersection for 3 and 4 at %f\n", xint4);
+  if (!(xint4 != xint4) && isPinger(xint4)) {
+    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+           pingerLocation.at(1));
+    printf("Pinger Located34\n");
+    return;
+  } else {
+    printf("Pinger not found\n");
   }
 }
 
