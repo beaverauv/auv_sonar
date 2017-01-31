@@ -62,7 +62,7 @@ void Multilateration::findPinger() {
 
   xint0 = findFunctionIntersection(f1, f2, fd1, fd2, 1);
   printf("Found function intersection for 1 and 2 at %f\n", xint0);
-  if (!(xint0 != xint0) && isPinger(xint0)) {
+  if (isPinger(xint0)) {
     printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     return;
@@ -71,7 +71,7 @@ void Multilateration::findPinger() {
   }
   xint1 = findFunctionIntersection(f1, f3, fd1, fd3, 1);
   printf("Found function intersection for 1 and 3 at %f\n", xint1);
-  if (!(xint1 != xint1) && isPinger(xint1)) {
+  if (isPinger(xint1)) {
     printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     printf("Pinger Located13\n");
@@ -81,7 +81,7 @@ void Multilateration::findPinger() {
   }
   xint2 = findFunctionIntersection(f1, f4, fd1, fd4, 1);
   printf("Found function intersection for 1 and 4 at %f\n", xint2);
-  if (!(xint2 != xint2) && isPinger(xint2)) {
+  if (isPinger(xint2)) {
     printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     printf("Pinger Located14\n");
@@ -91,7 +91,7 @@ void Multilateration::findPinger() {
   }
   xint3 = findFunctionIntersection(f2, f4, fd2, fd4, 1);
   printf("Found function intersection for 2 and 4 at %f\n", xint3);
-  if (!(xint3 != xint3) && isPinger(xint3)) {
+  if (isPinger(xint3)) {
     printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     printf("Pinger Located24\n");
@@ -101,7 +101,7 @@ void Multilateration::findPinger() {
   }
   xint4 = findFunctionIntersection(f3, f4, fd3, fd4, 1);
   printf("Found function intersection for 3 and 4 at %f\n", xint4);
-  if (!(xint4 != xint4) && isPinger(xint4)) {
+  if (isPinger(xint4)) {
     printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     printf("Pinger Located34\n");
@@ -112,6 +112,8 @@ void Multilateration::findPinger() {
 }
 
 bool Multilateration::isPinger(double intersectionXCoordinate) {
+  if (intersectionXCoordinate != intersectionXCoordinate)
+    return false;
   int onetwo = functionCombined(f1, f2, intersectionXCoordinate, 1);
   int onethree = functionCombined(f1, f3, intersectionXCoordinate, 1);
   int onefour = functionCombined(f1, f4, intersectionXCoordinate, 1);
