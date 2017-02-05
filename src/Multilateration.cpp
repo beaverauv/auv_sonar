@@ -23,38 +23,40 @@ double Multilateration::findFunctionIntersection(Equation f1, Equation f2,
       return std::numeric_limits<double>::quiet_NaN();
     }
   }
+
   return xCurrent;
+
 }
 
 void Multilateration::findAllIntersections() {
   allIntersections.at(0).at(0) = findFunctionIntersection(f1, f2, fd1, fd2, 1);
   allIntersections.at(0).at(1) =
       functionCombined(f1, f2, allIntersections.at(0).at(0), 1);
-  printf("%.18f, %.18f\n", allIntersections.at(0).at(0),
+  printf("%.5f, %.5f\n", allIntersections.at(0).at(0),
          allIntersections.at(0).at(1));
 
   allIntersections.at(1).at(0) = findFunctionIntersection(f1, f3, fd1, fd3, 1);
   allIntersections.at(1).at(1) =
       functionCombined(f1, f3, allIntersections.at(1).at(0), 1);
-  printf("%.18f, %.18f\n", allIntersections.at(1).at(1),
+  printf("%.5f, %.5f\n", allIntersections.at(1).at(1),
          allIntersections.at(1).at(1));
 
   allIntersections.at(2).at(0) = findFunctionIntersection(f1, f4, fd1, fd4, 1);
   allIntersections.at(2).at(1) =
       functionCombined(f1, f4, allIntersections.at(2).at(0), 1);
-  printf("%.18f, %.18f\n", allIntersections.at(2).at(0),
+  printf("%.5f, %.5f\n", allIntersections.at(2).at(0),
          allIntersections.at(2).at(1));
 
   allIntersections.at(3).at(0) = findFunctionIntersection(f2, f4, fd2, fd4, 1);
   allIntersections.at(3).at(1) =
       functionCombined(f2, f4, allIntersections.at(3).at(0), 1);
-  printf("%.18f, %.18f\n", allIntersections.at(3).at(0),
+  printf("%.5f, %.5f\n", allIntersections.at(3).at(0),
          allIntersections.at(3).at(1));
 
   allIntersections.at(4).at(0) = findFunctionIntersection(f3, f4, fd3, fd4, 1);
   allIntersections.at(4).at(1) =
       functionCombined(f3, f4, allIntersections.at(4).at(0), 1);
-  printf("%.18f, %.18f\n", allIntersections.at(4).at(0),
+  printf("%.5f, %.5f\n", allIntersections.at(4).at(0),
          allIntersections.at(4).at(1));
 }
 
@@ -63,7 +65,7 @@ void Multilateration::findPinger() {
   xint0 = findFunctionIntersection(f1, f2, fd1, fd2, 1);
   printf("Found function intersection for 1 and 2 at %f\n", xint0);
   if (isPinger(xint0)) {
-    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+    printf("Intersection %.5f, %.5f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     return;
   } else {
@@ -72,7 +74,7 @@ void Multilateration::findPinger() {
   xint1 = findFunctionIntersection(f1, f3, fd1, fd3, 1);
   printf("Found function intersection for 1 and 3 at %f\n", xint1);
   if (isPinger(xint1)) {
-    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+    printf("Intersection %.5f, %.5f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     printf("Pinger Located13\n");
     return;
@@ -82,7 +84,7 @@ void Multilateration::findPinger() {
   xint2 = findFunctionIntersection(f1, f4, fd1, fd4, 1);
   printf("Found function intersection for 1 and 4 at %f\n", xint2);
   if (isPinger(xint2)) {
-    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+    printf("Intersection %.5f, %.5f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     printf("Pinger Located14\n");
     return;
@@ -92,8 +94,8 @@ void Multilateration::findPinger() {
   xint3 = findFunctionIntersection(f2, f4, fd2, fd4, 1);
   printf("Found function intersection for 2 and 4 at %f\n", xint3);
   if (isPinger(xint3)) {
-    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
-           pingerLocation.at(1));
+    printf("Intersection %.5f, %.5f\n", pingerLocation.at(0),
+             pingerLocation.at(1));
     printf("Pinger Located24\n");
     return;
   } else {
@@ -102,7 +104,7 @@ void Multilateration::findPinger() {
   xint4 = findFunctionIntersection(f3, f4, fd3, fd4, 1);
   printf("Found function intersection for 3 and 4 at %f\n", xint4);
   if (isPinger(xint4)) {
-    printf("Intersection %.18f, %.18f\n", pingerLocation.at(0),
+    printf("Intersection %.5f, %.5f\n", pingerLocation.at(0),
            pingerLocation.at(1));
     printf("Pinger Located34\n");
     return;
@@ -112,22 +114,34 @@ void Multilateration::findPinger() {
 }
 
 bool Multilateration::isPinger(double intersectionXCoordinate) {
-  if (intersectionXCoordinate != intersectionXCoordinate)
+  int sign;
+  if isnan(intersectionXCoordinate)
     return false;
-  int onetwo = functionCombined(f1, f2, intersectionXCoordinate, 1);
-  int onethree = functionCombined(f1, f3, intersectionXCoordinate, 1);
-  int onefour = functionCombined(f1, f4, intersectionXCoordinate, 1);
-  int threefour = functionCombined(f3, f4, intersectionXCoordinate, 1);
-  bool onetwoonethree = ((onetwo - onethree) <= NewtonRaphsonXThresh);
-  bool onethreeonefour = ((onethree - onefour) <= NewtonRaphsonXThresh);
-  bool onefourthreefour = ((onefour - threefour) <= NewtonRaphsonXThresh);
-  if (onetwoonethree && onethreeonefour && onefourthreefour) {
+  double onetwo = fabs(functionCombined(f1, f2, intersectionXCoordinate, 1));
+  double twothree = fabs(functionCombined(f2, f3, intersectionXCoordinate, 1));
+  double onefour = fabs(functionCombined(f1, f4, intersectionXCoordinate, 1));
+  double threefour = fabs(functionCombined(f3, f4, intersectionXCoordinate, 1));
+
+  bool onetwotwothree = ((onetwo - twothree) <= 0.1);
+  bool twothreeonefour = ((twothree - onefour) <= 0.1);
+  bool onefourthreefour = ((onefour - threefour) <= 0.1);
+
+  if(fabs(f1(intersectionXCoordinate, 1)) - fabs(f2(intersectionXCoordinate, 1)) == 0){
+    sign = 1;
+  }
+  else{
+    sign = -1;
+  }
+  printf("sign %d", sign);
+
+  if (onetwotwothree && twothreeonefour && onefourthreefour) {
     pingerLocation.at(xCoord) = intersectionXCoordinate;
-    pingerLocation.at(yCoord) = f1(intersectionXCoordinate, 1);
+    pingerLocation.at(yCoord) = f3(intersectionXCoordinate, sign);
     return true;
   } else {
     return false;
   }
+
 }
 
 int Multilateration::getSign() {

@@ -34,7 +34,7 @@ public:
   double xCurrent;
   double xInitial = 10;
   double xChange = 0;
-  double xDist = 1;
+  double xDist = 13;
   double NewtonRaphsonXThresh = .0000000000001;
   int iteratorNewton;
   int maxIterations = 100;
@@ -61,17 +61,17 @@ public:
 private:
   float mountingDistance = 1; // The distance between each hydrophone in mm
 
-  double a = 0.115784275175;
+  double a = 93.7601330003;
   // double a = sq(distDifference12/2);
-  double b = 0.935821596706;
+  double b = 59.5268190974;
   // double b = sq(distDifference23/2)
-  double c = 0.0886131503014;
+  double c = 111.551297769;
   // double c = sq(distDifference34/2)
-  double d = 0.855231827134;
+  double d = 73.8596841213;
   // double d = sq(distDifference14/2)
 
   Equation f1 = [&](double x, int sign) {
-    return xDist + (sign * sqrt((sq(xDist) - a) * ((sq(x) / a) - 1)));
+    return xDist + (sign * sqrt( (sq(xDist) - a)*(-1 + sq(x)/a) ));
   };
 
   Equation f2 = [&](double x, int sign) {
@@ -79,7 +79,7 @@ private:
   };
 
   Equation f3 = [&](double x, int sign) {
-    return (-1 * xDist) + (sign * sqrt((sq(xDist) - c) * ((sq(x) / c) - 1)));
+    return (-1 * xDist) + (sign * sqrt( (sq(xDist) - c) * ((sq(x) / c) - 1) ));
   };
 
   Equation f4 = [&](double x, int sign) {
