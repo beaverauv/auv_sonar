@@ -2,21 +2,34 @@
 #define MULTILATERATION_H
 
 #include <array>
+#include <auv_sonar/KMeans.hpp>
 #include <functional>
 #include <math.h>
+#include <vector>
 
 typedef std::function<double(double, int)> Equation;
 typedef std::function<double(Equation, Equation, double, int)> CombinedEquation;
-typedef std::array<std::array<double, 2>, 10> Intersections;
+typedef std::vector<std::array<double, 2>> Intersections;
+
+template <typename T, typename... U>
+size_t getAddress(std::function<T(U...)> f) {
+  typedef T(fnType)(U...);
+  fnType **fnPointer = f.template target<fnType *>();
+  return (size_t)*fnPointer;
+}
 
 class Multilateration {
 public:
   Multilateration();
   ~Multilateration();
-  double findFunctionIntersection(Equation f1, Equation f2, Equation fd1,
-                                  Equation fd2, int sign);
+  double findFunctionIntersection(int i1, int i2, int sign);
   void findAllIntersections(); // finds all intersections and stores them in the
   // Intersections type allIntersections array
+  std::array<double, 2> loadIntersection(int i1, int i2, int sign);
+  Equation getFunction(int func);
+  Equation getDerivFunction(int func);
+  Equation getDerivFunction(Equation eq);
+
   void printAllIntersections() {}   // prints all the found intersection values
   auto sq(auto a) { return a * a; } // squares value a
 
@@ -25,19 +38,22 @@ public:
   bool checkForPinger(int arrayPosition, double intersection);
   // Checks a given interception to see if it is the pinger
   bool isPinger(double intersectionXCoordinate); // checks if a given
-                                                 // xCoordinate represents the
-                                                 // xCoordinate
-                                                 // of the pinger
+  // xCoordinate represents the
+  // xCoordinate
+  // of the pinger
+
+  void checkIntForPinger(int i1, int i2);
+
   Intersections allIntersections;
   std::array<double, 2> pingerLocation;
 
   double xCurrent;
-  double xInitial = 10;
+  double xInitial = 0.0001;
   double xChange = 0;
-  double xDist = 13;
-  double NewtonRaphsonXThresh = .0000000000001;
+  double xDist = 1;
+  double NewtonRaphsonXThresh = 0.0001;
   int iteratorNewton;
-  int maxIterations = 100;
+  int maxIterations = 1000;
   int arrayCounter = 0;
 
   int xCoord = 0; // for array purposes
@@ -54,6 +70,8 @@ public:
   double distDifference34 = 0;
   double distDifference41 = 0;
 
+  std::vector<Point> points;
+
   double timeLag23 = 0;
 
   int getSign();
@@ -61,17 +79,17 @@ public:
 private:
   float mountingDistance = 1; // The distance between each hydrophone in mm
 
-  double a = 93.7601330003;
+  double a = 0.0552538835813;
   // double a = sq(distDifference12/2);
-  double b = 59.5268190974;
+  double b = 0.946647542253;
   // double b = sq(distDifference23/2)
-  double c = 111.551297769;
+  double c = 0.0564906363378;
   // double c = sq(distDifference34/2)
-  double d = 73.8596841213;
+  double d = 0.941563591867;
   // double d = sq(distDifference14/2)
 
   Equation f1 = [&](double x, int sign) {
-    return xDist + (sign * sqrt( (sq(xDist) - a)*(-1 + sq(x)/a) ));
+    return xDist + (sign * sqrt((sq(xDist) - a) * (-1 + sq(x) / a)));
   };
 
   Equation f2 = [&](double x, int sign) {
@@ -79,7 +97,7 @@ private:
   };
 
   Equation f3 = [&](double x, int sign) {
-    return (-1 * xDist) + (sign * sqrt( (sq(xDist) - c) * ((sq(x) / c) - 1) ));
+    return (-1 * xDist) + (sign * sqrt((sq(xDist) - c) * ((sq(x) / c) - 1)));
   };
 
   Equation f4 = [&](double x, int sign) {
@@ -111,6 +129,8 @@ private:
 
   CombinedEquation functionCombined = [](Equation Eq1, Equation Eq2, double x,
                                          int sign) {
+    // printf("      %.5f - %.5f = %.5f\n", Eq1(x, sign), Eq2(x, sign),
+    //        Eq1(x, sign) - Eq2(x, sign));
     return Eq1(x, sign) - Eq2(x, sign);
   };
 };
