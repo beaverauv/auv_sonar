@@ -147,7 +147,7 @@ void Multilateration::findPinger() {
 
 bool Multilateration::isPinger(double intersectionXCoordinate) {
   int sign;
-  if (isnan(intersectionXCoordinate))
+  if (::isnan(intersectionXCoordinate))
     return false;
   double onetwo = fabs(functionCombined(f1, f2, intersectionXCoordinate, 1));
   double twothree = fabs(functionCombined(f2, f3, intersectionXCoordinate, 1));
