@@ -33,6 +33,11 @@ find_package(catkin REQUIRED COMPONENTS
  )
  target_include_directories(alglib PUBLIC include/alglib)
 
+add_library(filter
+  src/filter/filt.cpp
+)
+
+target_include_directories(filter PUBLIC include/filter)
 
 catkin_package()
 
@@ -54,7 +59,7 @@ add_dependencies(auv_sonar
 
 add_executable(auv_sonar_cont src/main.cpp)
 
-target_link_libraries(auv_sonar_cont ${catkin_LIBRARIES} auv_sonar alglib)
+target_link_libraries(auv_sonar_cont ${catkin_LIBRARIES} auv_sonar alglib filter)
 add_dependencies(auv_sonar_cont
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}

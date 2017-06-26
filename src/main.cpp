@@ -2,10 +2,11 @@
 
 #include <alglib/fasttransforms.h>
 #include <alglib/linalg.h>
+#include <filter/filt.h>
 
 int main(int argc, char *argv[]) {
   int i;
-
+  Filter *my_filter;
   std::cout << "Cross Correlation test start" << std::endl;
 
   // generate white noise signal with distribution(gen)
